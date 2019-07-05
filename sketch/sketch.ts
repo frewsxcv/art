@@ -1,3 +1,10 @@
+interface Cell {
+  x: number;
+  y: number;
+  xPx: number;
+  yPx: number;
+}
+
 class Grid {
   gridWidth: number;
   cellWidth: number;
@@ -12,10 +19,12 @@ class Grid {
     this.numCells = Math.pow(this.numCellsInRow, 2);
   }
 
-  forEachCell(f: (x: number, y: number) => any) {
+  forEachCell(f: (cell: Cell) => any) {
     for (let x = 0; x < this.numCellsInRow; x += 1) {
       for (let y = 0; y < this.numCellsInRow; y += 1) {
-        f(x, y);
+        f({
+          x, y, xPx: x * this.cellWidth, yPx: y * this.cellWidth
+        });
       }
     }
   }
@@ -41,12 +50,12 @@ class NoiseGrid {
   }
 
   visualize() {
-    this.grid.forEachCell((x, y) => {
-      const noiseVal = this.noiseAt(x, y);
+    this.grid.forEachCell(cell => {
+      const noiseVal = this.noiseAt(cell.x, cell.y);
       fill(noiseVal * 255);
       rect(
-        x * this.grid.cellWidth,
-        y * this.grid.cellWidth,
+        cell.xPx,
+        cell.yPx,
         this.grid.cellWidth,
         this.grid.cellWidth
       );
@@ -66,19 +75,19 @@ class FlowField {
   }
 
   update() {
-    this.grid.forEachCell((x, y) => {
-      const noiseVal = this.noiseGrid.noiseAt(x, y);
-      this.vecs[y * this.grid.numCellsInRow + x] = noiseVal * 2 * PI;
+    this.grid.forEachCell((cell) => {
+      const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
+      this.vecs[cell.y * this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
     });
   }
 
   visualize() {
-    this.grid.forEachCell((x, y) => {
-      const noiseVal = this.noiseGrid.noiseAt(x, y);
+    this.grid.forEachCell((cell) => {
+      const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
       push();
       translate(
-        x * this.grid.cellWidth + this.grid.cellWidth / 2,
-        y * this.grid.cellWidth + this.grid.cellWidth / 2
+        cell.xPx + this.grid.cellWidth / 2,
+        cell.yPx + this.grid.cellWidth / 2
       );
       rotate(noiseVal * 4 * PI);
       beginShape();

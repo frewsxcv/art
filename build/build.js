@@ -9,7 +9,9 @@ var Grid = (function () {
     Grid.prototype.forEachCell = function (f) {
         for (var x = 0; x < this.numCellsInRow; x += 1) {
             for (var y = 0; y < this.numCellsInRow; y += 1) {
-                f(x, y);
+                f({
+                    x: x, y: y, xPx: x * this.cellWidth, yPx: y * this.cellWidth
+                });
             }
         }
     };
@@ -29,10 +31,10 @@ var NoiseGrid = (function () {
     };
     NoiseGrid.prototype.visualize = function () {
         var _this = this;
-        this.grid.forEachCell(function (x, y) {
-            var noiseVal = _this.noiseAt(x, y);
+        this.grid.forEachCell(function (cell) {
+            var noiseVal = _this.noiseAt(cell.x, cell.y);
             fill(noiseVal * 255);
-            rect(x * _this.grid.cellWidth, y * _this.grid.cellWidth, _this.grid.cellWidth, _this.grid.cellWidth);
+            rect(cell.xPx, cell.yPx, _this.grid.cellWidth, _this.grid.cellWidth);
         });
     };
     return NoiseGrid;
@@ -45,17 +47,17 @@ var FlowField = (function () {
     }
     FlowField.prototype.update = function () {
         var _this = this;
-        this.grid.forEachCell(function (x, y) {
-            var noiseVal = _this.noiseGrid.noiseAt(x, y);
-            _this.vecs[y * _this.grid.numCellsInRow + x] = noiseVal * 2 * PI;
+        this.grid.forEachCell(function (cell) {
+            var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
+            _this.vecs[cell.y * _this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
         });
     };
     FlowField.prototype.visualize = function () {
         var _this = this;
-        this.grid.forEachCell(function (x, y) {
-            var noiseVal = _this.noiseGrid.noiseAt(x, y);
+        this.grid.forEachCell(function (cell) {
+            var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
             push();
-            translate(x * _this.grid.cellWidth + _this.grid.cellWidth / 2, y * _this.grid.cellWidth + _this.grid.cellWidth / 2);
+            translate(cell.xPx + _this.grid.cellWidth / 2, cell.yPx + _this.grid.cellWidth / 2);
             rotate(noiseVal * 4 * PI);
             beginShape();
             vertex(0, 0);
