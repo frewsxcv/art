@@ -59,7 +59,7 @@ var FlowField = (function () {
             push();
             translate(cell.xPx + _this.grid.cellWidth / 2, cell.yPx + _this.grid.cellWidth / 2);
             rotate(noiseVal * 4 * PI);
-            arrow({ length: _this.grid.cellWidth });
+            arrow({ length: _this.grid.cellWidth - 1 });
             pop();
         });
     };
@@ -67,12 +67,14 @@ var FlowField = (function () {
 }());
 var arrow = function (_a) {
     var length = _a.length;
+    var headWidth = Math.round(length / 10);
     beginShape();
+    fill(0);
     vertex(0, 0);
-    vertex(length - 2, 0);
-    vertex(length - 3, -1);
-    vertex(length - 3, 1);
-    vertex(length - 2, 0);
+    vertex(length, 0);
+    vertex(length - headWidth, -headWidth);
+    vertex(length - headWidth, headWidth);
+    vertex(length, 0);
     endShape();
 };
 var Fps = (function () {
