@@ -58,7 +58,7 @@ var FlowField = (function () {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
             push();
             translate(cell.xPx + _this.grid.cellWidth / 2, cell.yPx + _this.grid.cellWidth / 2);
-            rotate(noiseVal * 4 * PI);
+            rotate(noiseVal * 2 * TWO_PI);
             arrow({ length: _this.grid.cellWidth - 1 });
             pop();
         });

@@ -89,7 +89,7 @@ class FlowField {
         cell.xPx + this.grid.cellWidth / 2,
         cell.yPx + this.grid.cellWidth / 2
       );
-      rotate(noiseVal * 4 * PI);
+      rotate(noiseVal * 2 * TWO_PI);
       arrow({ length: this.grid.cellWidth - 1 });
       pop();
     });
