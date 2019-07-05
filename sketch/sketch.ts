@@ -90,18 +90,21 @@ class FlowField {
         cell.yPx + this.grid.cellWidth / 2
       );
       rotate(noiseVal * 4 * PI);
-      beginShape();
-      vertex(0, 0);
-      vertex(this.grid.cellWidth - 2, 0);
-      vertex(this.grid.cellWidth - 3, -1);
-      vertex(this.grid.cellWidth - 3, 1);
-      vertex(this.grid.cellWidth - 2, 0);
-      endShape();
-      // line(0, 0, grid.cellWidth - 1, 0);
+      arrow({ width: this.grid.cellWidth });
       pop();
     });
   }
 }
+
+const arrow = ({ width }: { width: number }) => {
+  beginShape();
+  vertex(0, 0);
+  vertex(width - 2, 0);
+  vertex(width - 3, -1);
+  vertex(width - 3, 1);
+  vertex(width - 2, 0);
+  endShape();
+};
 
 class Fps {
   elem: p5.Element;
