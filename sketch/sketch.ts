@@ -97,7 +97,7 @@ class FlowField {
 }
 
 const arrow = ({ length }: { length: number }) => {
-  const headWidth = Math.round(length / 10);
+  const headWidth = Math.ceil(length / 10);
   beginShape();
   fill(0)
   vertex(0, 0);

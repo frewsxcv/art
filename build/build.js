@@ -67,7 +67,7 @@ var FlowField = (function () {
 }());
 var arrow = function (_a) {
     var length = _a.length;
-    var headWidth = Math.round(length / 10);
+    var headWidth = Math.ceil(length / 10);
     beginShape();
     fill(0);
     vertex(0, 0);
