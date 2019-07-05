@@ -68,14 +68,8 @@ var FlowField = (function () {
 var arrow = function (_a) {
     var length = _a.length;
     var headWidth = Math.ceil(length / 10);
-    beginShape();
-    fill(0);
-    vertex(0, 0);
-    vertex(length, 0);
-    vertex(length - headWidth, -headWidth);
-    vertex(length - headWidth, headWidth);
-    vertex(length, 0);
-    endShape();
+    line(0, 0, length, 0);
+    triangle(length, 0, length - headWidth, -headWidth, length - headWidth, headWidth);
 };
 var Fps = (function () {
     function Fps() {
