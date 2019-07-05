@@ -59,20 +59,20 @@ var FlowField = (function () {
             push();
             translate(cell.xPx + _this.grid.cellWidth / 2, cell.yPx + _this.grid.cellWidth / 2);
             rotate(noiseVal * 4 * PI);
-            arrow({ width: _this.grid.cellWidth });
+            arrow({ length: _this.grid.cellWidth });
             pop();
         });
     };
     return FlowField;
 }());
 var arrow = function (_a) {
-    var width = _a.width;
+    var length = _a.length;
     beginShape();
     vertex(0, 0);
-    vertex(width - 2, 0);
-    vertex(width - 3, -1);
-    vertex(width - 3, 1);
-    vertex(width - 2, 0);
+    vertex(length - 2, 0);
+    vertex(length - 3, -1);
+    vertex(length - 3, 1);
+    vertex(length - 2, 0);
     endShape();
 };
 var Fps = (function () {

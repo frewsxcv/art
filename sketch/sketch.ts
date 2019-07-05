@@ -90,19 +90,19 @@ class FlowField {
         cell.yPx + this.grid.cellWidth / 2
       );
       rotate(noiseVal * 4 * PI);
-      arrow({ width: this.grid.cellWidth });
+      arrow({ length: this.grid.cellWidth });
       pop();
     });
   }
 }
 
-const arrow = ({ width }: { width: number }) => {
+const arrow = ({ length }: { length: number }) => {
   beginShape();
   vertex(0, 0);
-  vertex(width - 2, 0);
-  vertex(width - 3, -1);
-  vertex(width - 3, 1);
-  vertex(width - 2, 0);
+  vertex(length - 2, 0);
+  vertex(length - 3, -1);
+  vertex(length - 3, 1);
+  vertex(length - 2, 0);
   endShape();
 };
 
