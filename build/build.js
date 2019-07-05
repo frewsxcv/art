@@ -41,27 +41,28 @@ var NoiseGrid = (function () {
 }());
 var FlowField = (function () {
     function FlowField(grid, noiseGrid) {
+        var _this = this;
         this.grid = grid;
         this.noiseGrid = noiseGrid;
         this.vecs = new Array(grid.numCells);
-    }
-    FlowField.prototype.update = function () {
-        var _this = this;
-        this.grid.forEachCell(function (cell) {
+        this.updateOnEach = function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
             _this.vecs[cell.y * _this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
-        });
-    };
-    FlowField.prototype.visualize = function () {
-        var _this = this;
-        this.grid.forEachCell(function (cell) {
+        };
+        this.visualizeOnEach = function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
             push();
             translate(cell.xPx + _this.grid.cellWidth / 2, cell.yPx + _this.grid.cellWidth / 2);
             rotate(noiseVal * 2 * TWO_PI);
             arrow({ length: _this.grid.cellWidth - 1 });
             pop();
-        });
+        };
+    }
+    FlowField.prototype.update = function () {
+        this.grid.forEachCell(this.updateOnEach);
+    };
+    FlowField.prototype.visualize = function () {
+        this.grid.forEachCell(this.visualizeOnEach);
     };
     return FlowField;
 }());
@@ -85,7 +86,7 @@ var noiseGrid;
 var flowField;
 var fps;
 function setup() {
-    grid = new Grid(400, 10);
+    grid = new Grid(600, 10);
     noiseGrid = new NoiseGrid(grid, 0.1);
     flowField = new FlowField(grid, noiseGrid);
     fps = new Fps();

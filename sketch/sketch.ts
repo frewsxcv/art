@@ -67,22 +67,18 @@ class FlowField {
   grid: Grid;
   noiseGrid: NoiseGrid;
   vecs: number[];
+  updateOnEach: (_: Cell) => any;
+  visualizeOnEach: (_: Cell) => any;
 
   constructor(grid: Grid, noiseGrid: NoiseGrid) {
     this.grid = grid;
     this.noiseGrid = noiseGrid;
     this.vecs = new Array(grid.numCells);
-  }
-
-  update() {
-    this.grid.forEachCell((cell) => {
+    this.updateOnEach = (cell) => {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
       this.vecs[cell.y * this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
-    });
-  }
-
-  visualize() {
-    this.grid.forEachCell((cell) => {
+    };
+    this.visualizeOnEach = (cell) => {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
       push();
       translate(
@@ -92,7 +88,15 @@ class FlowField {
       rotate(noiseVal * 2 * TWO_PI);
       arrow({ length: this.grid.cellWidth - 1 });
       pop();
-    });
+    };
+  }
+
+  update() {
+    this.grid.forEachCell(this.updateOnEach);
+  }
+
+  visualize() {
+    this.grid.forEachCell(this.visualizeOnEach);
   }
 }
 
@@ -104,6 +108,7 @@ const arrow = ({ length }: { length: number }) => {
 
 class Fps {
   elem: p5.Element;
+  f: any;
 
   constructor() {
     this.elem = createDiv();
@@ -120,7 +125,7 @@ let flowField: FlowField;
 let fps: Fps;
 
 function setup() {
-  grid = new Grid(400, 10);
+  grid = new Grid(600, 10);
   noiseGrid = new NoiseGrid(grid, 0.1);
   flowField = new FlowField(grid, noiseGrid);
   fps = new Fps();
