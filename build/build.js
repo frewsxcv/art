@@ -5,11 +5,7 @@ var Particle = (function () {
         this.acc = createVector(0, 0);
     }
     Particle.prototype.update = function () {
-        this.pos.add(this.vel);
-        this.pos.set([
-            this.pos.x % width,
-            this.pos.y % height,
-        ]);
+        this.pos.add(this.vel).set(this.pos.x % width, this.pos.y % height);
         this.vel.add(this.acc);
         this.acc.mult(0);
     };
