@@ -10,7 +10,10 @@ var Grid = (function () {
         for (var x = 0; x < this.numCellsInRow; x += 1) {
             for (var y = 0; y < this.numCellsInRow; y += 1) {
                 f({
-                    x: x, y: y, xPx: x * this.cellWidth, yPx: y * this.cellWidth
+                    x: x,
+                    y: y,
+                    xPx: x * this.cellWidth,
+                    yPx: y * this.cellWidth
                 });
             }
         }

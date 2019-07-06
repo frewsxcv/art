@@ -23,7 +23,10 @@ class Grid {
     for (let x = 0; x < this.numCellsInRow; x += 1) {
       for (let y = 0; y < this.numCellsInRow; y += 1) {
         f({
-          x, y, xPx: x * this.cellWidth, yPx: y * this.cellWidth
+          x,
+          y,
+          xPx: x * this.cellWidth,
+          yPx: y * this.cellWidth
         });
       }
     }
@@ -53,12 +56,7 @@ class NoiseGrid {
     this.grid.forEachCell(cell => {
       const noiseVal = this.noiseAt(cell.x, cell.y);
       fill(noiseVal * 255);
-      rect(
-        cell.xPx,
-        cell.yPx,
-        this.grid.cellWidth,
-        this.grid.cellWidth
-      );
+      rect(cell.xPx, cell.yPx, this.grid.cellWidth, this.grid.cellWidth);
     });
   }
 }
@@ -74,11 +72,11 @@ class FlowField {
     this.grid = grid;
     this.noiseGrid = noiseGrid;
     this.vecs = new Array(grid.numCells);
-    this.updateOnEach = (cell) => {
+    this.updateOnEach = cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
       this.vecs[cell.y * this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
     };
-    this.visualizeOnEach = (cell) => {
+    this.visualizeOnEach = cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
       push();
       translate(
@@ -103,7 +101,14 @@ class FlowField {
 const arrow = ({ length }: { length: number }) => {
   const headWidth = Math.ceil(length / 10);
   line(0, 0, length, 0);
-  triangle(length, 0, length - headWidth, -headWidth, length - headWidth, headWidth);
+  triangle(
+    length,
+    0,
+    length - headWidth,
+    -headWidth,
+    length - headWidth,
+    headWidth
+  );
 };
 
 class Fps {
