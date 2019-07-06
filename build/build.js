@@ -1,11 +1,15 @@
 var Particle = (function () {
     function Particle() {
         this.pos = createVector(random(width), random(height));
-        this.vel = createVector(0, 0);
+        this.vel = createVector(random(), random());
         this.acc = createVector(0, 0);
     }
     Particle.prototype.update = function () {
         this.pos.add(this.vel);
+        this.pos.set([
+            this.pos.x % width,
+            this.pos.y % height,
+        ]);
         this.vel.add(this.acc);
         this.acc.mult(0);
     };
@@ -118,7 +122,7 @@ var noiseGrid;
 var flowField;
 var fps;
 function setup() {
-    grid = new Grid(600, 10);
+    grid = new Grid(300, 10);
     noiseGrid = new NoiseGrid(grid, 0.1);
     flowField = new FlowField(grid, noiseGrid);
     fps = new Fps();

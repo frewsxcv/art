@@ -5,12 +5,16 @@ class Particle {
 
   constructor() {
     this.pos = createVector(random(width), random(height));
-    this.vel = createVector(0, 0);
+    this.vel = createVector(random(), random());
     this.acc = createVector(0, 0);
   }
 
   update() {
     this.pos.add(this.vel);
+    this.pos.set([
+      this.pos.x % width,
+      this.pos.y % height,
+    ]);
     this.vel.add(this.acc);
     this.acc.mult(0);
   }
@@ -168,7 +172,7 @@ let flowField: FlowField;
 let fps: Fps;
 
 function setup() {
-  grid = new Grid(600, 10);
+  grid = new Grid(300, 10);
   noiseGrid = new NoiseGrid(grid, 0.1);
   flowField = new FlowField(grid, noiseGrid);
   fps = new Fps();
