@@ -108,7 +108,6 @@ const arrow = ({ length }: { length: number }) => {
 
 class Fps {
   elem: p5.Element;
-  f: any;
 
   constructor() {
     this.elem = createDiv();
