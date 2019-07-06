@@ -1,3 +1,23 @@
+var Particle = (function () {
+    function Particle() {
+        this.pos = createVector(random(width), random(height));
+        this.vel = createVector(0, 0);
+        this.acc = createVector(0, 0);
+    }
+    Particle.prototype.update = function () {
+        this.pos.add(this.vel);
+        this.vel.add(this.acc);
+        this.acc.mult(0);
+    };
+    Particle.prototype.applyForce = function (force) {
+        this.acc.add(force);
+    };
+    Particle.prototype.show = function () {
+        stroke(0);
+        point(this.pos.x, this.pos.y);
+    };
+    return Particle;
+}());
 var Grid = (function () {
     function Grid(gridWidth, cellWidth) {
         createCanvas(gridWidth, gridWidth);
@@ -42,12 +62,17 @@ var NoiseGrid = (function () {
     };
     return NoiseGrid;
 }());
+var numParticles = 100;
 var FlowField = (function () {
     function FlowField(grid, noiseGrid) {
         var _this = this;
         this.grid = grid;
         this.noiseGrid = noiseGrid;
         this.vecs = new Array(grid.numCells);
+        this.particles = new Array(numParticles);
+        for (var i = 0; i < numParticles; i++) {
+            this.particles.push(new Particle());
+        }
         this.updateOnEach = function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
             _this.vecs[cell.y * _this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
@@ -63,6 +88,10 @@ var FlowField = (function () {
     }
     FlowField.prototype.update = function () {
         this.grid.forEachCell(this.updateOnEach);
+        this.particles.forEach(function (particle) {
+            particle.update();
+            particle.show();
+        });
     };
     FlowField.prototype.visualize = function () {
         this.grid.forEachCell(this.visualizeOnEach);
@@ -97,7 +126,7 @@ function setup() {
 function draw() {
     background(200);
     fps.update();
-    flowField.visualize();
+    flowField.update();
     noiseGrid.stepZ();
 }
 //# sourceMappingURL=build.js.map
