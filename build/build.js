@@ -9,6 +9,7 @@ var Particle = (function () {
         this.pos.add([width, height]);
         this.pos.set(this.pos.x % width, this.pos.y % height);
         this.vel.add(this.acc);
+        this.vel.limit(1.5);
         this.acc.mult(0);
     };
     Particle.prototype.applyForce = function (force) {
@@ -17,6 +18,13 @@ var Particle = (function () {
     Particle.prototype.show = function () {
         stroke(0);
         point(this.pos.x, this.pos.y);
+    };
+    Particle.prototype.follow = function (flowField) {
+        var x = floor(this.pos.x / 10);
+        var y = floor(this.pos.y / 10);
+        var index = x + y * 30;
+        var force = flowField.vecs[index];
+        this.applyForce(force);
     };
     return Particle;
 }());
@@ -77,7 +85,7 @@ var FlowField = (function () {
         }
         this.updateOnEach = function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
-            _this.vecs[cell.y * _this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
+            _this.vecs[cell.y * _this.grid.numCellsInRow + cell.x] = p5.Vector.fromAngle(noiseVal * 2 * PI);
         };
         this.visualizeVectorsOnEach = function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
@@ -97,6 +105,11 @@ var FlowField = (function () {
     };
     FlowField.prototype.visualizeVectors = function () {
         this.grid.forEachCell(this.visualizeVectorsOnEach);
+    };
+    FlowField.prototype.visualize = function () {
+        this.particles.forEach(function (particle) {
+            particle.follow(flowField);
+        });
     };
     return FlowField;
 }());
@@ -129,6 +142,7 @@ function draw() {
     background(200);
     fps.update();
     flowField.update();
+    flowField.visualize();
     noiseGrid.stepZ();
 }
 //# sourceMappingURL=build.js.map

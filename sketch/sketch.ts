@@ -16,7 +16,7 @@ class Particle {
     this.pos.set(this.pos.x % width, this.pos.y % height);
 
     this.vel.add(this.acc);
-    this.vel.limit(3);
+    this.vel.limit(1.5);
 
     this.acc.mult(0);
   }
@@ -28,6 +28,15 @@ class Particle {
   show() {
     stroke(0);
     point(this.pos.x, this.pos.y);
+  }
+
+  follow(flowField: FlowField) {
+    // TODO: 10 and other nums shouldnt be hardcoded
+    const x = floor(this.pos.x / 10);
+    const y = floor(this.pos.y / 10);
+    const index = x + y * 30;
+    const force = flowField.vecs[index];
+    this.applyForce(force);
   }
 }
 
@@ -51,6 +60,9 @@ class Grid {
     this.numCellsInRow = gridWidth / cellWidth;
     this.numCells = Math.pow(this.numCellsInRow, 2);
   }
+
+  // cellIdxFromPx(xPx: number, yPx: number) {
+  // }
 
   forEachCell(f: (cell: Cell) => any) {
     for (let x = 0; x < this.numCellsInRow; x += 1) {
@@ -99,7 +111,7 @@ const numParticles = 100;
 class FlowField {
   grid: Grid;
   noiseGrid: NoiseGrid;
-  vecs: number[];
+  vecs: p5.Vector[];
   updateOnEach: (_: Cell) => any;
   visualizeVectorsOnEach: (_: Cell) => any;
   particles: Particle[];
@@ -115,7 +127,7 @@ class FlowField {
 
     this.updateOnEach = cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
-      this.vecs[cell.y * this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
+      this.vecs[cell.y * this.grid.numCellsInRow + cell.x] = p5.Vector.fromAngle(noiseVal * 2 * PI);
     };
     this.visualizeVectorsOnEach = cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
@@ -140,6 +152,12 @@ class FlowField {
 
   visualizeVectors() {
     this.grid.forEachCell(this.visualizeVectorsOnEach);
+  }
+
+  visualize() {
+    this.particles.forEach(particle => {
+      particle.follow(flowField);
+    });
   }
 }
 
@@ -187,9 +205,9 @@ function draw() {
 
   // noiseGrid.visualize();
 
-  // flowField.visualize();
-
   flowField.update();
+
+  flowField.visualize();
 
   noiseGrid.stepZ();
 }
