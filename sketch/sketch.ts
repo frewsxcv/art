@@ -16,7 +16,7 @@ class Particle {
     this.pos.set(this.pos.x % width, this.pos.y % height);
 
     this.vel.add(this.acc);
-    this.vel.limit(1.5);
+    this.vel.limit(0.2);
 
     this.acc.mult(0);
   }
@@ -26,7 +26,7 @@ class Particle {
   }
 
   show() {
-    stroke(0, 100);
+    stroke(0, 5);
     strokeWeight(1)
     point(this.pos.x, this.pos.y);
   }
@@ -196,7 +196,7 @@ let fps: Fps;
 
 function setup() {
   grid = new Grid(300, 10);
-  noiseGrid = new NoiseGrid(grid, 0.1, 0.01);
+  noiseGrid = new NoiseGrid(grid, 0.05, 0.01);
   flowField = new FlowField(grid, noiseGrid);
   fps = new Fps();
   background(200);
