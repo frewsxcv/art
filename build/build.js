@@ -52,13 +52,14 @@ var Grid = (function () {
     return Grid;
 }());
 var NoiseGrid = (function () {
-    function NoiseGrid(grid, offsetInc) {
+    function NoiseGrid(grid, offsetInc, zOffsetInc) {
         this.grid = grid;
         this.offsetInc = offsetInc;
         this.z = 0;
+        this.zOffsetInc = zOffsetInc;
     }
     NoiseGrid.prototype.stepZ = function () {
-        this.z += this.offsetInc;
+        this.z += this.zOffsetInc;
     };
     NoiseGrid.prototype.noiseAt = function (x, y) {
         return noise(x * this.offsetInc, y * this.offsetInc, this.z);
@@ -135,7 +136,7 @@ var flowField;
 var fps;
 function setup() {
     grid = new Grid(300, 10);
-    noiseGrid = new NoiseGrid(grid, 0.1);
+    noiseGrid = new NoiseGrid(grid, 0.1, 0.01);
     flowField = new FlowField(grid, noiseGrid);
     fps = new Fps();
     background(200);

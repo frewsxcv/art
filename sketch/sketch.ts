@@ -83,15 +83,17 @@ class NoiseGrid {
   grid: Grid;
   offsetInc: number;
   z: number;
+  zOffsetInc: number;
 
-  constructor(grid: Grid, offsetInc: number) {
+  constructor(grid: Grid, offsetInc: number, zOffsetInc: number) {
     this.grid = grid;
     this.offsetInc = offsetInc;
     this.z = 0;
+    this.zOffsetInc = zOffsetInc;
   }
 
   stepZ() {
-    this.z += this.offsetInc;
+    this.z += this.zOffsetInc;
   }
 
   noiseAt(x: number, y: number) {
@@ -194,7 +196,7 @@ let fps: Fps;
 
 function setup() {
   grid = new Grid(300, 10);
-  noiseGrid = new NoiseGrid(grid, 0.1);
+  noiseGrid = new NoiseGrid(grid, 0.1, 0.01);
   flowField = new FlowField(grid, noiseGrid);
   fps = new Fps();
   background(200);
