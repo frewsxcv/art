@@ -79,7 +79,7 @@ var FlowField = (function () {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
             _this.vecs[cell.y * _this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
         };
-        this.visualizeOnEach = function (cell) {
+        this.visualizeVectorsOnEach = function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
             push();
             translate(cell.xPx + _this.grid.cellWidth / 2, cell.yPx + _this.grid.cellWidth / 2);
@@ -95,8 +95,8 @@ var FlowField = (function () {
             particle.show();
         });
     };
-    FlowField.prototype.visualize = function () {
-        this.grid.forEachCell(this.visualizeOnEach);
+    FlowField.prototype.visualizeVectors = function () {
+        this.grid.forEachCell(this.visualizeVectorsOnEach);
     };
     return FlowField;
 }());

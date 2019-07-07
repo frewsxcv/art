@@ -16,6 +16,8 @@ class Particle {
     this.pos.set(this.pos.x % width, this.pos.y % height);
 
     this.vel.add(this.acc);
+    this.vel.limit(3);
+
     this.acc.mult(0);
   }
 
@@ -99,7 +101,7 @@ class FlowField {
   noiseGrid: NoiseGrid;
   vecs: number[];
   updateOnEach: (_: Cell) => any;
-  visualizeOnEach: (_: Cell) => any;
+  visualizeVectorsOnEach: (_: Cell) => any;
   particles: Particle[];
 
   constructor(grid: Grid, noiseGrid: NoiseGrid) {
@@ -115,7 +117,7 @@ class FlowField {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
       this.vecs[cell.y * this.grid.numCellsInRow + cell.x] = noiseVal * 2 * PI;
     };
-    this.visualizeOnEach = cell => {
+    this.visualizeVectorsOnEach = cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
       push();
       translate(
@@ -136,8 +138,8 @@ class FlowField {
     });
   }
 
-  visualize() {
-    this.grid.forEachCell(this.visualizeOnEach);
+  visualizeVectors() {
+    this.grid.forEachCell(this.visualizeVectorsOnEach);
   }
 }
 
