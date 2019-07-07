@@ -5,12 +5,16 @@ class Particle {
 
   constructor() {
     this.pos = createVector(random(width), random(height));
-    this.vel = createVector(random(), random());
+    this.vel = createVector(random(2) - 1, random(2) - 1);
     this.acc = createVector(0, 0);
   }
 
   update() {
-    this.pos.add(this.vel).set(this.pos.x % width, this.pos.y % height);
+    this.pos.add(this.vel);
+    // Add width and height to account to push the negative values into positive.
+    this.pos.add([width, height]);
+    this.pos.set(this.pos.x % width, this.pos.y % height);
+
     this.vel.add(this.acc);
     this.acc.mult(0);
   }

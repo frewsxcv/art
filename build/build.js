@@ -1,11 +1,13 @@
 var Particle = (function () {
     function Particle() {
         this.pos = createVector(random(width), random(height));
-        this.vel = createVector(random(), random());
+        this.vel = createVector(random(2) - 1, random(2) - 1);
         this.acc = createVector(0, 0);
     }
     Particle.prototype.update = function () {
-        this.pos.add(this.vel).set(this.pos.x % width, this.pos.y % height);
+        this.pos.add(this.vel);
+        this.pos.add([width, height]);
+        this.pos.set(this.pos.x % width, this.pos.y % height);
         this.vel.add(this.acc);
         this.acc.mult(0);
     };
