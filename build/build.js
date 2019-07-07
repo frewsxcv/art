@@ -1,5 +1,6 @@
 var Particle = (function () {
     function Particle() {
+        this.velLimit = 0.2;
         this.pos = createVector(random(width), random(height));
         this.vel = createVector(0, 0);
         this.acc = createVector(0, 0);
@@ -9,7 +10,7 @@ var Particle = (function () {
         this.pos.add([width, height]);
         this.pos.set(this.pos.x % width, this.pos.y % height);
         this.vel.add(this.acc);
-        this.vel.limit(0.2);
+        this.vel.limit(this.velLimit);
         this.acc.mult(0);
     };
     Particle.prototype.applyForce = function (force) {

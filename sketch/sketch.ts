@@ -2,6 +2,7 @@ class Particle {
   pos: p5.Vector;
   vel: p5.Vector;
   acc: p5.Vector;
+  velLimit = 0.2;
 
   constructor() {
     this.pos = createVector(random(width), random(height));
@@ -16,7 +17,7 @@ class Particle {
     this.pos.set(this.pos.x % width, this.pos.y % height);
 
     this.vel.add(this.acc);
-    this.vel.limit(0.2);
+    this.vel.limit(this.velLimit);
 
     this.acc.mult(0);
   }
