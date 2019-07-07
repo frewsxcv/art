@@ -16,7 +16,8 @@ var Particle = (function () {
         this.acc.add(force);
     };
     Particle.prototype.show = function () {
-        stroke(0);
+        stroke(0, 100);
+        strokeWeight(1);
         point(this.pos.x, this.pos.y);
     };
     Particle.prototype.follow = function (flowField) {
@@ -137,9 +138,9 @@ function setup() {
     noiseGrid = new NoiseGrid(grid, 0.1);
     flowField = new FlowField(grid, noiseGrid);
     fps = new Fps();
+    background(200);
 }
 function draw() {
-    background(200);
     fps.update();
     flowField.update();
     flowField.visualize();

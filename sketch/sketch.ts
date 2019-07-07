@@ -26,7 +26,8 @@ class Particle {
   }
 
   show() {
-    stroke(0);
+    stroke(0, 100);
+    strokeWeight(1)
     point(this.pos.x, this.pos.y);
   }
 
@@ -196,11 +197,10 @@ function setup() {
   noiseGrid = new NoiseGrid(grid, 0.1);
   flowField = new FlowField(grid, noiseGrid);
   fps = new Fps();
+  background(200);
 }
 
 function draw() {
-  background(200);
-
   fps.update();
 
   // noiseGrid.visualize();
