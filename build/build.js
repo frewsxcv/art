@@ -21,13 +21,6 @@ var Particle = (function () {
         strokeWeight(1);
         point(this.pos.x, this.pos.y);
     };
-    Particle.prototype.follow = function (flowField) {
-        var x = floor(this.pos.x / 10);
-        var y = floor(this.pos.y / 10);
-        var index = x + y * 30;
-        var force = flowField.vecs[index];
-        this.applyForce(force);
-    };
     return Particle;
 }());
 var Grid = (function () {
@@ -106,12 +99,19 @@ var FlowField = (function () {
             particle.show();
         });
     };
+    FlowField.prototype.forceFromPos = function (xPx, yPx) {
+        var x = floor(xPx / this.grid.cellWidth);
+        var y = floor(yPx / this.grid.cellWidth);
+        var index = x + y * this.grid.numCellsInRow;
+        return flowField.vecs[index];
+    };
     FlowField.prototype.visualizeVectors = function () {
         this.grid.forEachCell(this.visualizeVectorsOnEach);
     };
     FlowField.prototype.visualize = function () {
+        var _this = this;
         this.particles.forEach(function (particle) {
-            particle.follow(flowField);
+            particle.applyForce(_this.forceFromPos(particle.pos.x, particle.pos.y));
         });
     };
     return FlowField;

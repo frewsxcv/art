@@ -31,15 +31,6 @@ class Particle {
     strokeWeight(1)
     point(this.pos.x, this.pos.y);
   }
-
-  follow(flowField: FlowField) {
-    // TODO: 10 and other nums shouldnt be hardcoded
-    const x = floor(this.pos.x / 10);
-    const y = floor(this.pos.y / 10);
-    const index = x + y * 30;
-    const force = flowField.vecs[index];
-    this.applyForce(force);
-  }
 }
 
 interface Cell {
@@ -62,9 +53,6 @@ class Grid {
     this.numCellsInRow = gridWidth / cellWidth;
     this.numCells = Math.pow(this.numCellsInRow, 2);
   }
-
-  // cellIdxFromPx(xPx: number, yPx: number) {
-  // }
 
   forEachCell(f: (cell: Cell) => any) {
     for (let x = 0; x < this.numCellsInRow; x += 1) {
@@ -154,13 +142,22 @@ class FlowField {
     });
   }
 
+  forceFromPos(xPx: number, yPx: number) {
+    const x = floor(xPx / this.grid.cellWidth);
+    const y = floor(yPx / this.grid.cellWidth);
+    const index = x + y * this.grid.numCellsInRow;
+    return flowField.vecs[index];
+  }
+
   visualizeVectors() {
     this.grid.forEachCell(this.visualizeVectorsOnEach);
   }
 
   visualize() {
     this.particles.forEach(particle => {
-      particle.follow(flowField);
+      particle.applyForce(
+        this.forceFromPos(particle.pos.x, particle.pos.y)
+      );
     });
   }
 }
