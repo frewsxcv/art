@@ -2,7 +2,7 @@ class Particle {
   pos: p5.Vector;
   vel: p5.Vector;
   acc: p5.Vector;
-  velLimit = 0.2;
+  velLimit = 5;
 
   constructor() {
     this.pos = createVector(random(width), random(height));
@@ -197,7 +197,7 @@ function setup() {
   noiseGrid = new NoiseGrid(grid, 0.05, 0.01);
   flowField = new FlowField(grid, noiseGrid);
   fps = new Fps();
-  background(200);
+  background(240);
 }
 
 function draw() {

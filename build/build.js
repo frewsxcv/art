@@ -1,6 +1,6 @@
 var Particle = (function () {
     function Particle() {
-        this.velLimit = 0.2;
+        this.velLimit = 5;
         this.pos = createVector(random(width), random(height));
         this.vel = createVector(0, 0);
         this.acc = createVector(0, 0);
@@ -140,7 +140,7 @@ function setup() {
     noiseGrid = new NoiseGrid(grid, 0.05, 0.01);
     flowField = new FlowField(grid, noiseGrid);
     fps = new Fps();
-    background(200);
+    background(240);
 }
 function draw() {
     fps.update();
