@@ -50,15 +50,15 @@ var NoiseGrid = (function () {
     function NoiseGrid(p, grid, offsetInc, zOffsetInc) {
         this.grid = grid;
         this.offsetInc = offsetInc;
-        this.z = 0;
+        this.zOffset = 0;
         this.zOffsetInc = zOffsetInc;
         this.p = p;
     }
     NoiseGrid.prototype.stepZ = function () {
-        this.z += this.zOffsetInc;
+        this.zOffset += this.zOffsetInc;
     };
     NoiseGrid.prototype.noiseAt = function (x, y) {
-        return this.p.noise(x * this.offsetInc, y * this.offsetInc, this.z);
+        return this.p.noise(x * this.offsetInc, y * this.offsetInc, this.zOffset);
     };
     NoiseGrid.prototype.visualize = function () {
         var _this = this;

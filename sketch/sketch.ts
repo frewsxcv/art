@@ -73,24 +73,24 @@ class Grid {
 class NoiseGrid {
   grid: Grid;
   offsetInc: number;
-  z: number;
+  zOffset: number;
   zOffsetInc: number;
   p: p5;
 
   constructor(p: p5, grid: Grid, offsetInc: number, zOffsetInc: number) {
     this.grid = grid;
     this.offsetInc = offsetInc;
-    this.z = 0;
+    this.zOffset = 0;
     this.zOffsetInc = zOffsetInc;
     this.p = p;
   }
 
   stepZ() {
-    this.z += this.zOffsetInc;
+    this.zOffset += this.zOffsetInc;
   }
 
   noiseAt(x: number, y: number) {
-    return this.p.noise(x * this.offsetInc, y * this.offsetInc, this.z);
+    return this.p.noise(x * this.offsetInc, y * this.offsetInc, this.zOffset);
   }
 
   visualize() {
