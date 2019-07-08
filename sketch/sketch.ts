@@ -34,7 +34,7 @@ class Particle {
 
   show() {
     this.p.stroke(0, 5);
-    this.p.strokeWeight(1)
+    this.p.strokeWeight(1);
     this.p.point(this.pos.x, this.pos.y);
   }
 }
@@ -51,7 +51,7 @@ class PixelPos {
   toGridPos(grid: Grid) {
     return new GridPos(
       Math.floor(this.x / grid.cellWidth),
-      Math.floor(this.y / grid.cellWidth),
+      Math.floor(this.y / grid.cellWidth)
     );
   }
 }
@@ -67,8 +67,8 @@ class GridPos {
 }
 
 interface Cell {
-  gridPos: GridPos,
-  pixelPos: PixelPos,
+  gridPos: GridPos;
+  pixelPos: PixelPos;
 }
 
 class Grid {
@@ -90,7 +90,7 @@ class Grid {
       for (let y = 0; y < this.numCellsInRow; y += 1) {
         f({
           gridPos: new GridPos(x, y),
-          pixelPos: new PixelPos(x * this.cellWidth, y * this.cellWidth),
+          pixelPos: new PixelPos(x * this.cellWidth, y * this.cellWidth)
         });
       }
     }
@@ -117,14 +117,23 @@ class NoiseGrid {
   }
 
   noiseAt(gridPos: GridPos) {
-    return this.p.noise(gridPos.x * this.xyOffsetInc, gridPos.y * this.xyOffsetInc, this.zOffset);
+    return this.p.noise(
+      gridPos.x * this.xyOffsetInc,
+      gridPos.y * this.xyOffsetInc,
+      this.zOffset
+    );
   }
 
   visualize() {
     this.grid.forEachCell(cell => {
       const noiseVal = this.noiseAt(cell.gridPos);
       this.p.fill(noiseVal * 255);
-      this.p.rect(cell.pixelPos.x, cell.pixelPos.y, this.grid.cellWidth, this.grid.cellWidth);
+      this.p.rect(
+        cell.pixelPos.x,
+        cell.pixelPos.y,
+        this.grid.cellWidth,
+        this.grid.cellWidth
+      );
     });
   }
 }
@@ -143,7 +152,9 @@ class VectorField {
   update() {
     this.noiseGrid.grid.forEachCell(cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.gridPos);
-      this.vecs[cell.gridPos.x * this.noiseGrid.grid.numCellsInRow + cell.gridPos.y] = p5.Vector.fromAngle(noiseVal * 2 * this.p.PI);
+      this.vecs[
+        cell.gridPos.x * this.noiseGrid.grid.numCellsInRow + cell.gridPos.y
+      ] = p5.Vector.fromAngle(noiseVal * 2 * this.p.PI);
     });
   }
 
@@ -177,7 +188,12 @@ class FlowField {
   particles: Particle[];
   p: p5;
 
-  constructor(p: p5, grid: Grid, noiseGrid: NoiseGrid, vectorField: VectorField) {
+  constructor(
+    p: p5,
+    grid: Grid,
+    noiseGrid: NoiseGrid,
+    vectorField: VectorField
+  ) {
     this.grid = grid;
     this.noiseGrid = noiseGrid;
     this.vectorField = vectorField;
@@ -189,7 +205,7 @@ class FlowField {
   }
 
   update() {
-    this.particles.forEach((particle) => {
+    this.particles.forEach(particle => {
       particle.update();
       particle.show();
     });

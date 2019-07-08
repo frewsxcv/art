@@ -57,7 +57,7 @@ var Grid = (function () {
             for (var y = 0; y < this.numCellsInRow; y += 1) {
                 f({
                     gridPos: new GridPos(x, y),
-                    pixelPos: new PixelPos(x * this.cellWidth, y * this.cellWidth),
+                    pixelPos: new PixelPos(x * this.cellWidth, y * this.cellWidth)
                 });
             }
         }
