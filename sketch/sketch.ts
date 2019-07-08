@@ -12,6 +12,10 @@ class Particle {
     this.p = p;
   }
 
+  pixelPos() {
+    return new PixelPos(this.pos.x, this.pos.y);
+  }
+
   update() {
     this.pos.add(this.vel);
     // Add width and height to account to push the negative values into positive.
@@ -35,11 +39,36 @@ class Particle {
   }
 }
 
-interface Cell {
+class PixelPos {
   x: number;
   y: number;
-  xPx: number;
-  yPx: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  toGridPos(grid: Grid) {
+    return new GridPos(
+      Math.floor(this.x / grid.cellWidth),
+      Math.floor(this.y / grid.cellWidth),
+    );
+  }
+}
+
+class GridPos {
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+interface Cell {
+  gridPos: GridPos,
+  pixelPos: PixelPos,
 }
 
 class Grid {
@@ -60,10 +89,8 @@ class Grid {
     for (let x = 0; x < this.numCellsInRow; x += 1) {
       for (let y = 0; y < this.numCellsInRow; y += 1) {
         f({
-          x,
-          y,
-          xPx: x * this.cellWidth,
-          yPx: y * this.cellWidth
+          gridPos: new GridPos(x, y),
+          pixelPos: new PixelPos(x * this.cellWidth, y * this.cellWidth),
         });
       }
     }
@@ -89,15 +116,15 @@ class NoiseGrid {
     this.zOffset += this.zOffsetInc;
   }
 
-  noiseAt(x: number, y: number) {
-    return this.p.noise(x * this.xyOffsetInc, y * this.xyOffsetInc, this.zOffset);
+  noiseAt(gridPos: GridPos) {
+    return this.p.noise(gridPos.x * this.xyOffsetInc, gridPos.y * this.xyOffsetInc, this.zOffset);
   }
 
   visualize() {
     this.grid.forEachCell(cell => {
-      const noiseVal = this.noiseAt(cell.x, cell.y);
+      const noiseVal = this.noiseAt(cell.gridPos);
       this.p.fill(noiseVal * 255);
-      this.p.rect(cell.xPx, cell.yPx, this.grid.cellWidth, this.grid.cellWidth);
+      this.p.rect(cell.pixelPos.x, cell.pixelPos.y, this.grid.cellWidth, this.grid.cellWidth);
     });
   }
 }
@@ -115,25 +142,24 @@ class VectorField {
 
   update() {
     this.noiseGrid.grid.forEachCell(cell => {
-      const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
-      this.vecs[cell.y * this.noiseGrid.grid.numCellsInRow + cell.x] = p5.Vector.fromAngle(noiseVal * 2 * this.p.PI);
+      const noiseVal = this.noiseGrid.noiseAt(cell.gridPos);
+      this.vecs[cell.gridPos.x * this.noiseGrid.grid.numCellsInRow + cell.gridPos.y] = p5.Vector.fromAngle(noiseVal * 2 * this.p.PI);
     });
   }
 
-  forceFromPos(xPx: number, yPx: number) {
-    const x = this.p.floor(xPx / this.noiseGrid.grid.cellWidth);
-    const y = this.p.floor(yPx / this.noiseGrid.grid.cellWidth);
-    const index = x + y * this.noiseGrid.grid.numCellsInRow;
+  forceFromPixelPos(pixelPos: PixelPos) {
+    const gridPos = pixelPos.toGridPos(this.noiseGrid.grid);
+    const index = gridPos.x + gridPos.y * this.noiseGrid.grid.numCellsInRow;
     return this.vecs[index];
   }
 
   visualize() {
     this.noiseGrid.grid.forEachCell(cell => {
-      const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
+      const noiseVal = this.noiseGrid.noiseAt(cell.gridPos);
       this.p.push();
       this.p.translate(
-        cell.xPx + this.noiseGrid.grid.cellWidth / 2,
-        cell.yPx + this.noiseGrid.grid.cellWidth / 2
+        cell.pixelPos.x + this.noiseGrid.grid.cellWidth / 2,
+        cell.pixelPos.y + this.noiseGrid.grid.cellWidth / 2
       );
       this.p.rotate(noiseVal * 2 * this.p.TWO_PI);
       arrow(this.p, { length: this.noiseGrid.grid.cellWidth - 1 });
@@ -172,7 +198,7 @@ class FlowField {
   visualize() {
     this.particles.forEach(particle => {
       particle.applyForce(
-        this.vectorField.forceFromPos(particle.pos.x, particle.pos.y)
+        this.vectorField.forceFromPixelPos(particle.pixelPos())
       );
     });
   }
@@ -227,7 +253,7 @@ const sketch1 = (p: p5) => {
     noiseGrid.stepZ();
     flowField.update();
 
-    vectorField.visualize();
+    // vectorField.visualize();
     // flowField.visualize();
     // noiseGrid.visualize();
   };

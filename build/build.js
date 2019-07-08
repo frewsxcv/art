@@ -6,6 +6,9 @@ var Particle = (function () {
         this.acc = p.createVector(0, 0);
         this.p = p;
     }
+    Particle.prototype.pixelPos = function () {
+        return new PixelPos(this.pos.x, this.pos.y);
+    };
     Particle.prototype.update = function () {
         this.pos.add(this.vel);
         this.pos.add([this.p.width, this.p.height]);
@@ -24,6 +27,23 @@ var Particle = (function () {
     };
     return Particle;
 }());
+var PixelPos = (function () {
+    function PixelPos(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    PixelPos.prototype.toGridPos = function (grid) {
+        return new GridPos(Math.floor(this.x / grid.cellWidth), Math.floor(this.y / grid.cellWidth));
+    };
+    return PixelPos;
+}());
+var GridPos = (function () {
+    function GridPos(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    return GridPos;
+}());
 var Grid = (function () {
     function Grid(p, gridWidth, cellWidth) {
         p.createCanvas(gridWidth, gridWidth);
@@ -36,10 +56,8 @@ var Grid = (function () {
         for (var x = 0; x < this.numCellsInRow; x += 1) {
             for (var y = 0; y < this.numCellsInRow; y += 1) {
                 f({
-                    x: x,
-                    y: y,
-                    xPx: x * this.cellWidth,
-                    yPx: y * this.cellWidth
+                    gridPos: new GridPos(x, y),
+                    pixelPos: new PixelPos(x * this.cellWidth, y * this.cellWidth),
                 });
             }
         }
@@ -57,15 +75,15 @@ var NoiseGrid = (function () {
     NoiseGrid.prototype.stepZ = function () {
         this.zOffset += this.zOffsetInc;
     };
-    NoiseGrid.prototype.noiseAt = function (x, y) {
-        return this.p.noise(x * this.xyOffsetInc, y * this.xyOffsetInc, this.zOffset);
+    NoiseGrid.prototype.noiseAt = function (gridPos) {
+        return this.p.noise(gridPos.x * this.xyOffsetInc, gridPos.y * this.xyOffsetInc, this.zOffset);
     };
     NoiseGrid.prototype.visualize = function () {
         var _this = this;
         this.grid.forEachCell(function (cell) {
-            var noiseVal = _this.noiseAt(cell.x, cell.y);
+            var noiseVal = _this.noiseAt(cell.gridPos);
             _this.p.fill(noiseVal * 255);
-            _this.p.rect(cell.xPx, cell.yPx, _this.grid.cellWidth, _this.grid.cellWidth);
+            _this.p.rect(cell.pixelPos.x, cell.pixelPos.y, _this.grid.cellWidth, _this.grid.cellWidth);
         });
     };
     return NoiseGrid;
@@ -79,22 +97,21 @@ var VectorField = (function () {
     VectorField.prototype.update = function () {
         var _this = this;
         this.noiseGrid.grid.forEachCell(function (cell) {
-            var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
-            _this.vecs[cell.y * _this.noiseGrid.grid.numCellsInRow + cell.x] = p5.Vector.fromAngle(noiseVal * 2 * _this.p.PI);
+            var noiseVal = _this.noiseGrid.noiseAt(cell.gridPos);
+            _this.vecs[cell.gridPos.x * _this.noiseGrid.grid.numCellsInRow + cell.gridPos.y] = p5.Vector.fromAngle(noiseVal * 2 * _this.p.PI);
         });
     };
-    VectorField.prototype.forceFromPos = function (xPx, yPx) {
-        var x = this.p.floor(xPx / this.noiseGrid.grid.cellWidth);
-        var y = this.p.floor(yPx / this.noiseGrid.grid.cellWidth);
-        var index = x + y * this.noiseGrid.grid.numCellsInRow;
+    VectorField.prototype.forceFromPixelPos = function (pixelPos) {
+        var gridPos = pixelPos.toGridPos(this.noiseGrid.grid);
+        var index = gridPos.x + gridPos.y * this.noiseGrid.grid.numCellsInRow;
         return this.vecs[index];
     };
     VectorField.prototype.visualize = function () {
         var _this = this;
         this.noiseGrid.grid.forEachCell(function (cell) {
-            var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
+            var noiseVal = _this.noiseGrid.noiseAt(cell.gridPos);
             _this.p.push();
-            _this.p.translate(cell.xPx + _this.noiseGrid.grid.cellWidth / 2, cell.yPx + _this.noiseGrid.grid.cellWidth / 2);
+            _this.p.translate(cell.pixelPos.x + _this.noiseGrid.grid.cellWidth / 2, cell.pixelPos.y + _this.noiseGrid.grid.cellWidth / 2);
             _this.p.rotate(noiseVal * 2 * _this.p.TWO_PI);
             arrow(_this.p, { length: _this.noiseGrid.grid.cellWidth - 1 });
             _this.p.pop();
@@ -123,7 +140,7 @@ var FlowField = (function () {
     FlowField.prototype.visualize = function () {
         var _this = this;
         this.particles.forEach(function (particle) {
-            particle.applyForce(_this.vectorField.forceFromPos(particle.pos.x, particle.pos.y));
+            particle.applyForce(_this.vectorField.forceFromPixelPos(particle.pixelPos()));
         });
     };
     return FlowField;
@@ -163,7 +180,6 @@ var sketch1 = function (p) {
         vectorField.update();
         noiseGrid.stepZ();
         flowField.update();
-        vectorField.visualize();
     };
 };
 new p5(sketch1);
