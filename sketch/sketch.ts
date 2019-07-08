@@ -152,7 +152,7 @@ class FlowField {
     const x = this.p.floor(xPx / this.grid.cellWidth);
     const y = this.p.floor(yPx / this.grid.cellWidth);
     const index = x + y * this.grid.numCellsInRow;
-    return flowField.vecs[index];
+    return this.vecs[index];
   }
 
   visualizeVectors() {
@@ -195,12 +195,12 @@ class Fps {
   }
 }
 
-let grid: Grid;
-let noiseGrid: NoiseGrid;
-let flowField: FlowField;
-let fps: Fps;
-
 const sketch1 = (p: p5) => {
+  let grid: Grid;
+  let noiseGrid: NoiseGrid;
+  let flowField: FlowField;
+  let fps: Fps;
+
   p.setup = () => {
     grid = new Grid(p, 300, 10);
     noiseGrid = new NoiseGrid(p, grid, 0.05, 0.01);

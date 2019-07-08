@@ -106,7 +106,7 @@ var FlowField = (function () {
         var x = this.p.floor(xPx / this.grid.cellWidth);
         var y = this.p.floor(yPx / this.grid.cellWidth);
         var index = x + y * this.grid.numCellsInRow;
-        return flowField.vecs[index];
+        return this.vecs[index];
     };
     FlowField.prototype.visualizeVectors = function () {
         this.grid.forEachCell(this.visualizeVectorsOnEach);
@@ -135,11 +135,11 @@ var Fps = (function () {
     };
     return Fps;
 }());
-var grid;
-var noiseGrid;
-var flowField;
-var fps;
 var sketch1 = function (p) {
+    var grid;
+    var noiseGrid;
+    var flowField;
+    var fps;
     p.setup = function () {
         grid = new Grid(p, 300, 10);
         noiseGrid = new NoiseGrid(p, grid, 0.05, 0.01);
