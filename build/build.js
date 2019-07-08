@@ -89,12 +89,22 @@ var VectorField = (function () {
         var index = x + y * this.noiseGrid.grid.numCellsInRow;
         return this.vecs[index];
     };
+    VectorField.prototype.visualize = function () {
+        var _this = this;
+        this.noiseGrid.grid.forEachCell(function (cell) {
+            var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
+            _this.p.push();
+            _this.p.translate(cell.xPx + _this.noiseGrid.grid.cellWidth / 2, cell.yPx + _this.noiseGrid.grid.cellWidth / 2);
+            _this.p.rotate(noiseVal * 2 * _this.p.TWO_PI);
+            arrow(_this.p, { length: _this.noiseGrid.grid.cellWidth - 1 });
+            _this.p.pop();
+        });
+    };
     return VectorField;
 }());
 var numParticles = 100;
 var FlowField = (function () {
     function FlowField(p, grid, noiseGrid, vectorField) {
-        var _this = this;
         this.grid = grid;
         this.noiseGrid = noiseGrid;
         this.vectorField = vectorField;
@@ -103,23 +113,12 @@ var FlowField = (function () {
         for (var i = 0; i < numParticles; i++) {
             this.particles.push(new Particle(p));
         }
-        this.visualizeVectorsOnEach = function (cell) {
-            var noiseVal = _this.noiseGrid.noiseAt(cell.x, cell.y);
-            _this.p.push();
-            _this.p.translate(cell.xPx + _this.grid.cellWidth / 2, cell.yPx + _this.grid.cellWidth / 2);
-            _this.p.rotate(noiseVal * 2 * _this.p.TWO_PI);
-            arrow(p, { length: _this.grid.cellWidth - 1 });
-            _this.p.pop();
-        };
     }
     FlowField.prototype.update = function () {
         this.particles.forEach(function (particle) {
             particle.update();
             particle.show();
         });
-    };
-    FlowField.prototype.visualizeVectors = function () {
-        this.grid.forEachCell(this.visualizeVectorsOnEach);
     };
     FlowField.prototype.visualize = function () {
         var _this = this;
@@ -164,7 +163,7 @@ var sketch1 = function (p) {
         vectorField.update();
         noiseGrid.stepZ();
         flowField.update();
-        flowField.visualizeVectors();
+        vectorField.visualize();
     };
 };
 new p5(sketch1);

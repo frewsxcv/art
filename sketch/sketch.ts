@@ -126,6 +126,20 @@ class VectorField {
     const index = x + y * this.noiseGrid.grid.numCellsInRow;
     return this.vecs[index];
   }
+
+  visualize() {
+    this.noiseGrid.grid.forEachCell(cell => {
+      const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
+      this.p.push();
+      this.p.translate(
+        cell.xPx + this.noiseGrid.grid.cellWidth / 2,
+        cell.yPx + this.noiseGrid.grid.cellWidth / 2
+      );
+      this.p.rotate(noiseVal * 2 * this.p.TWO_PI);
+      arrow(this.p, { length: this.noiseGrid.grid.cellWidth - 1 });
+      this.p.pop();
+    });
+  }
 }
 
 const numParticles = 100;
@@ -134,7 +148,6 @@ class FlowField {
   grid: Grid;
   noiseGrid: NoiseGrid;
   vectorField: VectorField;
-  visualizeVectorsOnEach: (_: Cell) => any;
   particles: Particle[];
   p: p5;
 
@@ -147,18 +160,6 @@ class FlowField {
     for (let i = 0; i < numParticles; i++) {
       this.particles.push(new Particle(p));
     }
-
-    this.visualizeVectorsOnEach = cell => {
-      const noiseVal = this.noiseGrid.noiseAt(cell.x, cell.y);
-      this.p.push();
-      this.p.translate(
-        cell.xPx + this.grid.cellWidth / 2,
-        cell.yPx + this.grid.cellWidth / 2
-      );
-      this.p.rotate(noiseVal * 2 * this.p.TWO_PI);
-      arrow(p, { length: this.grid.cellWidth - 1 });
-      this.p.pop();
-    };
   }
 
   update() {
@@ -166,10 +167,6 @@ class FlowField {
       particle.update();
       particle.show();
     });
-  }
-
-  visualizeVectors() {
-    this.grid.forEachCell(this.visualizeVectorsOnEach);
   }
 
   visualize() {
@@ -225,13 +222,12 @@ const sketch1 = (p: p5) => {
   };
 
   p.draw = () => {
-    // p.noLoop();
     fps.update();
     vectorField.update();
     noiseGrid.stepZ();
     flowField.update();
 
-    flowField.visualizeVectors();
+    vectorField.visualize();
     // flowField.visualize();
     // noiseGrid.visualize();
   };
