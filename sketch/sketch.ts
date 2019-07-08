@@ -104,9 +104,9 @@ class NoiseGrid {
   zOffsetInc: number;
   p: p5;
 
-  constructor(p: p5, grid: Grid, offsetInc: number, zOffsetInc: number) {
+  constructor(p: p5, grid: Grid, xyOffsetInc: number, zOffsetInc: number) {
     this.grid = grid;
-    this.xyOffsetInc = offsetInc;
+    this.xyOffsetInc = xyOffsetInc;
     this.zOffset = 0;
     this.zOffsetInc = zOffsetInc;
     this.p = p;

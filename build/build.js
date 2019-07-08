@@ -65,9 +65,9 @@ var Grid = (function () {
     return Grid;
 }());
 var NoiseGrid = (function () {
-    function NoiseGrid(p, grid, offsetInc, zOffsetInc) {
+    function NoiseGrid(p, grid, xyOffsetInc, zOffsetInc) {
         this.grid = grid;
-        this.xyOffsetInc = offsetInc;
+        this.xyOffsetInc = xyOffsetInc;
         this.zOffset = 0;
         this.zOffsetInc = zOffsetInc;
         this.p = p;
