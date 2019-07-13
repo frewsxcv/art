@@ -188,7 +188,7 @@ class VectorField {
     this.noiseGrid.grid.forEachCell(cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.gridPos);
       const vec = p5.Vector.fromAngle(noiseVal * 4 * this.p.TWO_PI);
-      vec.setMag(0.1);
+      vec.setMag(0.05);
       this.vecs[
         cell.gridPos.x * this.noiseGrid.grid.numCellsInRow + cell.gridPos.y
       ] = vec;
@@ -223,7 +223,7 @@ class FlowField {
   vectorField: VectorField;
   particles: Particle[];
   p: p5;
-  numParticles = 1000;
+  numParticles = 3000;
 
   constructor(
     p: p5,
@@ -289,8 +289,8 @@ const sketch1 = (p: p5) => {
   let vectorField: VectorField;
 
   p.setup = () => {
-    grid = new Grid(p, 800, 10);
-    noiseGrid = new NoiseGrid(p, grid, 0.022, 0.004);
+    grid = new Grid(p, 500, 10);
+    noiseGrid = new NoiseGrid(p, grid, 0.022, 0.003);
     vectorField = new VectorField(p, noiseGrid);
     flowField = new FlowField(p, grid, noiseGrid, vectorField);
     fps = new Fps(p);

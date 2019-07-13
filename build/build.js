@@ -128,7 +128,7 @@ var VectorField = (function () {
         this.noiseGrid.grid.forEachCell(function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.gridPos);
             var vec = p5.Vector.fromAngle(noiseVal * 4 * _this.p.TWO_PI);
-            vec.setMag(0.1);
+            vec.setMag(0.05);
             _this.vecs[cell.gridPos.x * _this.noiseGrid.grid.numCellsInRow + cell.gridPos.y] = vec;
         });
     };
@@ -153,7 +153,7 @@ var VectorField = (function () {
 }());
 var FlowField = (function () {
     function FlowField(p, grid, noiseGrid, vectorField) {
-        this.numParticles = 1000;
+        this.numParticles = 3000;
         this.grid = grid;
         this.noiseGrid = noiseGrid;
         this.vectorField = vectorField;
@@ -200,8 +200,8 @@ var sketch1 = function (p) {
     var fps;
     var vectorField;
     p.setup = function () {
-        grid = new Grid(p, 800, 10);
-        noiseGrid = new NoiseGrid(p, grid, 0.022, 0.004);
+        grid = new Grid(p, 500, 10);
+        noiseGrid = new NoiseGrid(p, grid, 0.022, 0.003);
         vectorField = new VectorField(p, noiseGrid);
         flowField = new FlowField(p, grid, noiseGrid, vectorField);
         fps = new Fps(p);
