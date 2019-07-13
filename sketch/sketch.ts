@@ -43,7 +43,7 @@ class Particle {
     if (this.jumped) {
       return;
     }
-    this.p.stroke(0, 5);
+    this.p.stroke(0, 2);
     this.p.strokeWeight(1);
     this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     // this.p.point(this.pos.x, this.pos.y);
@@ -196,7 +196,7 @@ class FlowField {
   vectorField: VectorField;
   particles: Particle[];
   p: p5;
-  numParticles = 100;
+  numParticles = 1000;
 
   constructor(
     p: p5,
@@ -276,7 +276,7 @@ const sketch1 = (p: p5) => {
     flowField.update();
 
     // vectorField.visualize();
-    // flowField.visualize();
+    flowField.visualize();
     // noiseGrid.visualize();
   };
 };
