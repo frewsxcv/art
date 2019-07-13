@@ -43,8 +43,7 @@ class Particle {
     if (this.jumped) {
       return;
     }
-    this.p.stroke(0, 1.2);
-    this.p.strokeWeight(1);
+    this.p.stroke(255, 0, 0, 1);
     this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     // this.p.point(this.pos.x, this.pos.y);
   }
@@ -163,9 +162,11 @@ class VectorField {
   update() {
     this.noiseGrid.grid.forEachCell(cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.gridPos);
+      const vec = p5.Vector.fromAngle(noiseVal * 4 * this.p.TWO_PI);
+      vec.setMag(0.1);
       this.vecs[
         cell.gridPos.x * this.noiseGrid.grid.numCellsInRow + cell.gridPos.y
-      ] = p5.Vector.fromAngle(noiseVal * 2 * this.p.PI);
+      ] = vec;
     });
   }
 
@@ -183,7 +184,7 @@ class VectorField {
         cell.pixelPos.x + this.noiseGrid.grid.cellWidth / 2,
         cell.pixelPos.y + this.noiseGrid.grid.cellWidth / 2
       );
-      this.p.rotate(noiseVal * 2 * this.p.TWO_PI);
+      this.p.rotate(noiseVal * 4 * this.p.TWO_PI);
       this.p.stroke(0, 0, 0);
       arrow(this.p, { length: this.noiseGrid.grid.cellWidth - 1 });
       this.p.pop();
@@ -264,7 +265,7 @@ const sketch1 = (p: p5) => {
 
   p.setup = () => {
     grid = new Grid(p, 300, 10);
-    noiseGrid = new NoiseGrid(p, grid, 0.03, 0.005);
+    noiseGrid = new NoiseGrid(p, grid, 0.022, 0.004);
     vectorField = new VectorField(p, noiseGrid);
     flowField = new FlowField(p, grid, noiseGrid, vectorField);
     fps = new Fps(p);
