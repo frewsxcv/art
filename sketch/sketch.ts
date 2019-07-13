@@ -1,3 +1,16 @@
+const randomPosAroundEdge = (p: p5) => {
+  const r = Math.floor(Math.random() * 4);
+  if (r === 0) {
+    return p.createVector(0, p.random(p.height));
+  } if (r === 1) {
+    return p.createVector(p.random(p.width), 0);
+  } if (r === 2) {
+    return p.createVector(p.width, p.random(p.height));
+  } else {
+    return p.createVector(p.random(p.width), p.height);
+  }
+}
+
 class Particle {
   pos: p5.Vector;
   prevPos: p5.Vector;
@@ -8,7 +21,7 @@ class Particle {
   jumped: boolean;
 
   constructor(p: p5) {
-    this.pos = p.createVector(p.random(p.width), p.random(p.height));
+    this.pos = randomPosAroundEdge(p);
     this.prevPos = this.pos;
     this.vel = p.createVector(0, 0);
     this.acc = p.createVector(0, 0);
@@ -21,20 +34,21 @@ class Particle {
   }
 
   update() {
+    this.vel.add(this.acc);
+    this.vel.limit(this.velLimit);
+
     this.prevPos = this.pos.copy();
     this.pos.add(this.vel);
-    this.jumped = this.pos.x < 0 || this.pos.y < 0 || this.pos.x > this.p.width || this.pos.y > this.p.height;
+    this.jumped = this.pos.x <= 0 || this.pos.y <= 0 || this.pos.x >= this.p.width || this.pos.y >= this.p.height;
+    // console.log(this.pos);
     if (this.jumped) {
-      this.pos = this.p.createVector(this.p.random(this.p.width), this.p.random(this.p.height));
+      this.pos = randomPosAroundEdge(this.p);
       return;
     }
     const x = this.pos.copy();
     // Add width and height to account to push the negative values into positive.
     this.pos.add([this.p.width, this.p.height]);
     this.pos.set(this.pos.x % this.p.width, this.pos.y % this.p.height);
-
-    this.vel.add(this.acc);
-    this.vel.limit(this.velLimit);
 
     this.acc.mult(0);
   }
@@ -47,10 +61,17 @@ class Particle {
     if (this.jumped) {
       return;
     }
-    this.p.stroke(10, 10, 10, 1);
+    this.p.stroke(10, 10, 10, 5);
     this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
+    // if (distance(this.prevPos, this.pos) > 200) {
+    //   debugger;
+    // }
     // this.p.point(this.pos.x, this.pos.y);
   }
+}
+
+const distance = (p1: p5.Vector, p2: p5.Vector) => {
+  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 }
 
 class PixelPos {
@@ -202,7 +223,7 @@ class FlowField {
   vectorField: VectorField;
   particles: Particle[];
   p: p5;
-  numParticles = 5000;
+  numParticles = 1000;
 
   constructor(
     p: p5,
@@ -268,7 +289,7 @@ const sketch1 = (p: p5) => {
   let vectorField: VectorField;
 
   p.setup = () => {
-    grid = new Grid(p, 300, 10);
+    grid = new Grid(p, 800, 10);
     noiseGrid = new NoiseGrid(p, grid, 0.022, 0.004);
     vectorField = new VectorField(p, noiseGrid);
     flowField = new FlowField(p, grid, noiseGrid, vectorField);
