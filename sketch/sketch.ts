@@ -184,6 +184,7 @@ class VectorField {
         cell.pixelPos.y + this.noiseGrid.grid.cellWidth / 2
       );
       this.p.rotate(noiseVal * 2 * this.p.TWO_PI);
+      this.p.stroke(0, 0, 0);
       arrow(this.p, { length: this.noiseGrid.grid.cellWidth - 1 });
       this.p.pop();
     });
@@ -275,8 +276,9 @@ const sketch1 = (p: p5) => {
     noiseGrid.stepZ();
     flowField.update();
 
-    // vectorField.visualize();
-    flowField.visualize();
+    p.background(240);
+    vectorField.visualize();
+    // flowField.visualize();
     // noiseGrid.visualize();
   };
 };

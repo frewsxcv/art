@@ -121,6 +121,7 @@ var VectorField = (function () {
             _this.p.push();
             _this.p.translate(cell.pixelPos.x + _this.noiseGrid.grid.cellWidth / 2, cell.pixelPos.y + _this.noiseGrid.grid.cellWidth / 2);
             _this.p.rotate(noiseVal * 2 * _this.p.TWO_PI);
+            _this.p.stroke(0, 0, 0);
             arrow(_this.p, { length: _this.noiseGrid.grid.cellWidth - 1 });
             _this.p.pop();
         });
@@ -187,7 +188,8 @@ var sketch1 = function (p) {
         vectorField.update();
         noiseGrid.stepZ();
         flowField.update();
-        flowField.visualize();
+        p.background(240);
+        vectorField.visualize();
     };
 };
 new p5(sketch1);
