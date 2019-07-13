@@ -36,7 +36,6 @@ var Particle = (function () {
             this.pos = randomPosAroundEdge(this.p);
             return;
         }
-        var x = this.pos.copy();
         this.pos.add([this.p.width, this.p.height]);
         this.pos.set(this.pos.x % this.p.width, this.pos.y % this.p.height);
         this.acc.mult(0);

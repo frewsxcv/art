@@ -45,7 +45,6 @@ class Particle {
       this.pos = randomPosAroundEdge(this.p);
       return;
     }
-    const x = this.pos.copy();
     // Add width and height to account to push the negative values into positive.
     this.pos.add([this.p.width, this.p.height]);
     this.pos.set(this.pos.x % this.p.width, this.pos.y % this.p.height);
