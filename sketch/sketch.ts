@@ -234,12 +234,13 @@ const arrow = (p: p5, { length }: { length: number }) => {
 };
 
 class Fps {
+  refreshRate = 500; // 0.5 seconds
+
   constructor(p: p5) {
     const elem = p.createDiv();
-    window.setInterval(
-      () => {
-        elem.html("<code>FPS: " + Math.floor(p.frameRate()) + "</code>");
-      }, 500);
+    window.setInterval(() => {
+      elem.html("<code>FPS: " + Math.floor(p.frameRate()) + "</code>");
+    }, this.refreshRate);
   }
 }
 

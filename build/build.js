@@ -153,10 +153,11 @@ var arrow = function (p, _a) {
 };
 var Fps = (function () {
     function Fps(p) {
+        this.refreshRate = 500;
         var elem = p.createDiv();
         window.setInterval(function () {
             elem.html("<code>FPS: " + Math.floor(p.frameRate()) + "</code>");
-        }, 500);
+        }, this.refreshRate);
     }
     return Fps;
 }());
