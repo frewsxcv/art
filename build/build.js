@@ -119,15 +119,15 @@ var VectorField = (function () {
     };
     return VectorField;
 }());
-var numParticles = 100;
 var FlowField = (function () {
     function FlowField(p, grid, noiseGrid, vectorField) {
+        this.numParticles = 100;
         this.grid = grid;
         this.noiseGrid = noiseGrid;
         this.vectorField = vectorField;
-        this.particles = new Array(numParticles);
+        this.particles = new Array(this.numParticles);
         this.p = p;
-        for (var i = 0; i < numParticles; i++) {
+        for (var i = 0; i < this.numParticles; i++) {
             this.particles.push(new Particle(p));
         }
     }

@@ -179,14 +179,13 @@ class VectorField {
   }
 }
 
-const numParticles = 100;
-
 class FlowField {
   grid: Grid;
   noiseGrid: NoiseGrid;
   vectorField: VectorField;
   particles: Particle[];
   p: p5;
+  numParticles = 100;
 
   constructor(
     p: p5,
@@ -197,9 +196,9 @@ class FlowField {
     this.grid = grid;
     this.noiseGrid = noiseGrid;
     this.vectorField = vectorField;
-    this.particles = new Array(numParticles);
+    this.particles = new Array(this.numParticles);
     this.p = p;
-    for (let i = 0; i < numParticles; i++) {
+    for (let i = 0; i < this.numParticles; i++) {
       this.particles.push(new Particle(p));
     }
   }
