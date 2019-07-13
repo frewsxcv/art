@@ -29,7 +29,7 @@ var Particle = (function () {
         if (this.jumped) {
             return;
         }
-        this.p.stroke(0, 2);
+        this.p.stroke(0, 1.2);
         this.p.strokeWeight(1);
         this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     };
@@ -130,7 +130,7 @@ var VectorField = (function () {
 }());
 var FlowField = (function () {
     function FlowField(p, grid, noiseGrid, vectorField) {
-        this.numParticles = 1000;
+        this.numParticles = 5000;
         this.grid = grid;
         this.noiseGrid = noiseGrid;
         this.vectorField = vectorField;
@@ -178,7 +178,7 @@ var sketch1 = function (p) {
     var vectorField;
     p.setup = function () {
         grid = new Grid(p, 300, 10);
-        noiseGrid = new NoiseGrid(p, grid, 0.05, 0.01);
+        noiseGrid = new NoiseGrid(p, grid, 0.03, 0.005);
         vectorField = new VectorField(p, noiseGrid);
         flowField = new FlowField(p, grid, noiseGrid, vectorField);
         fps = new Fps(p);
@@ -188,8 +188,7 @@ var sketch1 = function (p) {
         vectorField.update();
         noiseGrid.stepZ();
         flowField.update();
-        p.background(240);
-        vectorField.visualize();
+        flowField.visualize();
     };
 };
 new p5(sketch1);
