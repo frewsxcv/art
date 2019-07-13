@@ -153,12 +153,11 @@ var arrow = function (p, _a) {
 };
 var Fps = (function () {
     function Fps(p) {
-        this.elem = p.createDiv();
-        this.p = p;
+        var elem = p.createDiv();
+        window.setInterval(function () {
+            elem.html("<code>FPS: " + Math.floor(p.frameRate()) + "</code>");
+        }, 500);
     }
-    Fps.prototype.update = function () {
-        this.elem.html("<code>FPS: " + Math.floor(this.p.frameRate()) + "</code>");
-    };
     return Fps;
 }());
 var sketch1 = function (p) {
@@ -176,7 +175,6 @@ var sketch1 = function (p) {
         p.background(240);
     };
     p.draw = function () {
-        fps.update();
         vectorField.update();
         noiseGrid.stepZ();
         flowField.update();

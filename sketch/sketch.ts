@@ -234,16 +234,12 @@ const arrow = (p: p5, { length }: { length: number }) => {
 };
 
 class Fps {
-  elem: p5.Element;
-  p: p5;
-
   constructor(p: p5) {
-    this.elem = p.createDiv();
-    this.p = p;
-  }
-
-  update() {
-    this.elem.html("<code>FPS: " + Math.floor(this.p.frameRate()) + "</code>");
+    const elem = p.createDiv();
+    window.setInterval(
+      () => {
+        elem.html("<code>FPS: " + Math.floor(p.frameRate()) + "</code>");
+      }, 500);
   }
 }
 
@@ -264,7 +260,6 @@ const sketch1 = (p: p5) => {
   };
 
   p.draw = () => {
-    fps.update();
     vectorField.update();
     noiseGrid.stepZ();
     flowField.update();
