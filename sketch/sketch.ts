@@ -1,15 +1,19 @@
 class Particle {
   pos: p5.Vector;
+  prevPos: p5.Vector;
   vel: p5.Vector;
   acc: p5.Vector;
-  velLimit = 5;
+  velLimit = 1;
   p: p5;
+  jumped: boolean;
 
   constructor(p: p5) {
     this.pos = p.createVector(p.random(p.width), p.random(p.height));
+    this.prevPos = this.pos;
     this.vel = p.createVector(0, 0);
     this.acc = p.createVector(0, 0);
     this.p = p;
+    this.jumped = false;
   }
 
   pixelPos() {
@@ -17,7 +21,10 @@ class Particle {
   }
 
   update() {
+    this.prevPos = this.pos.copy();
     this.pos.add(this.vel);
+    this.jumped = this.pos.x < 0 || this.pos.y < 0 || this.pos.x > this.p.width || this.pos.y > this.p.height;
+    const x = this.pos.copy();
     // Add width and height to account to push the negative values into positive.
     this.pos.add([this.p.width, this.p.height]);
     this.pos.set(this.pos.x % this.p.width, this.pos.y % this.p.height);
@@ -33,9 +40,13 @@ class Particle {
   }
 
   show() {
+    if (this.jumped) {
+      return;
+    }
     this.p.stroke(0, 5);
     this.p.strokeWeight(1);
-    this.p.point(this.pos.x, this.pos.y);
+    this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
+    // this.p.point(this.pos.x, this.pos.y);
   }
 }
 

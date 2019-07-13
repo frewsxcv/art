@@ -1,16 +1,21 @@
 var Particle = (function () {
     function Particle(p) {
-        this.velLimit = 5;
+        this.velLimit = 1;
         this.pos = p.createVector(p.random(p.width), p.random(p.height));
+        this.prevPos = this.pos;
         this.vel = p.createVector(0, 0);
         this.acc = p.createVector(0, 0);
         this.p = p;
+        this.jumped = false;
     }
     Particle.prototype.pixelPos = function () {
         return new PixelPos(this.pos.x, this.pos.y);
     };
     Particle.prototype.update = function () {
+        this.prevPos = this.pos.copy();
         this.pos.add(this.vel);
+        this.jumped = this.pos.x < 0 || this.pos.y < 0 || this.pos.x > this.p.width || this.pos.y > this.p.height;
+        var x = this.pos.copy();
         this.pos.add([this.p.width, this.p.height]);
         this.pos.set(this.pos.x % this.p.width, this.pos.y % this.p.height);
         this.vel.add(this.acc);
@@ -21,9 +26,12 @@ var Particle = (function () {
         this.acc.add(force);
     };
     Particle.prototype.show = function () {
+        if (this.jumped) {
+            return;
+        }
         this.p.stroke(0, 5);
         this.p.strokeWeight(1);
-        this.p.point(this.pos.x, this.pos.y);
+        this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     };
     return Particle;
 }());
