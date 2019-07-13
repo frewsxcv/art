@@ -24,6 +24,10 @@ class Particle {
     this.prevPos = this.pos.copy();
     this.pos.add(this.vel);
     this.jumped = this.pos.x < 0 || this.pos.y < 0 || this.pos.x > this.p.width || this.pos.y > this.p.height;
+    if (this.jumped) {
+      this.pos = this.p.createVector(this.p.random(this.p.width), this.p.random(this.p.height));
+      return;
+    }
     const x = this.pos.copy();
     // Add width and height to account to push the negative values into positive.
     this.pos.add([this.p.width, this.p.height]);

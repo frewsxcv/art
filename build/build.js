@@ -15,6 +15,10 @@ var Particle = (function () {
         this.prevPos = this.pos.copy();
         this.pos.add(this.vel);
         this.jumped = this.pos.x < 0 || this.pos.y < 0 || this.pos.x > this.p.width || this.pos.y > this.p.height;
+        if (this.jumped) {
+            this.pos = this.p.createVector(this.p.random(this.p.width), this.p.random(this.p.height));
+            return;
+        }
         var x = this.pos.copy();
         this.pos.add([this.p.width, this.p.height]);
         this.pos.set(this.pos.x % this.p.width, this.pos.y % this.p.height);
