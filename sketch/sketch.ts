@@ -47,7 +47,7 @@ class Particle {
     if (this.jumped) {
       return;
     }
-    this.p.stroke(255, 0, 0, 1);
+    this.p.stroke(100, 100, 100, 1);
     this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     // this.p.point(this.pos.x, this.pos.y);
   }
