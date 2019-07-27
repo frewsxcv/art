@@ -286,11 +286,11 @@ const sketch1 = (p: p5) => {
 
   p.setup = () => {
     grid = new Grid(p, 300, 10);
-    noiseGrid = new NoiseGrid(p, grid, 0.022, 0.003);
+    noiseGrid = new NoiseGrid(p, grid, 0.022, 0.002);
     vectorField = new VectorField(p, noiseGrid);
     flowField = new FlowField(p, grid, noiseGrid, vectorField);
     // fps = new Fps(p);
-    p.background(50);
+    p.background(30);
   };
 
   p.draw = () => {
