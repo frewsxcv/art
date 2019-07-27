@@ -22,7 +22,7 @@ var Particle = (function () {
         this.acc = p.createVector(0, 0);
         this.p = p;
         this.jumped = false;
-        this.strokeColor = p.color(250, 250, 250, 3);
+        this.strokeColor = p.color(255, 255, 255, 3);
     }
     Particle.prototype.pixelPos = function () {
         return new PixelPos(this.pos.x, this.pos.y);
@@ -122,13 +122,15 @@ var VectorField = (function () {
         this.vecs = new Array(noiseGrid.grid.numCells);
         this.noiseGrid = noiseGrid;
         this.p = p;
+        this.arrowColor = p.color(255, 255, 255);
+        this.vectorMag = 0.8;
     }
     VectorField.prototype.update = function () {
         var _this = this;
         this.noiseGrid.grid.forEachCell(function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.gridPos);
             var vec = p5.Vector.fromAngle(noiseVal * 4 * _this.p.TWO_PI);
-            vec.setMag(0.05);
+            vec.setMag(_this.vectorMag);
             _this.vecs[cell.gridPos.x * _this.noiseGrid.grid.numCellsInRow + cell.gridPos.y] = vec;
         });
     };
@@ -144,7 +146,7 @@ var VectorField = (function () {
             _this.p.push();
             _this.p.translate(cell.pixelPos.x + _this.noiseGrid.grid.cellWidth / 2, cell.pixelPos.y + _this.noiseGrid.grid.cellWidth / 2);
             _this.p.rotate(noiseVal * 4 * _this.p.TWO_PI);
-            _this.p.stroke(0, 0, 0);
+            _this.p.stroke(_this.arrowColor);
             arrow(_this.p, { length: _this.noiseGrid.grid.cellWidth - 1 });
             _this.p.pop();
         });
@@ -201,7 +203,7 @@ var sketch1 = function (p) {
     var vectorField;
     p.setup = function () {
         grid = new Grid(p, 300, 10);
-        noiseGrid = new NoiseGrid(p, grid, 0.022, 0.002);
+        noiseGrid = new NoiseGrid(p, grid, 0.09, 0.002);
         vectorField = new VectorField(p, noiseGrid);
         flowField = new FlowField(p, grid, noiseGrid, vectorField);
         p.background(30);
