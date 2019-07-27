@@ -60,7 +60,7 @@ class Particle {
     if (this.jumped) {
       return;
     }
-    this.p.stroke(10, 10, 10, 5);
+    this.p.stroke(240, 240, 240, 5);
     this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     // if (distance(this.prevPos, this.pos) > 200) {
     //   debugger;
@@ -293,7 +293,7 @@ const sketch1 = (p: p5) => {
     vectorField = new VectorField(p, noiseGrid);
     flowField = new FlowField(p, grid, noiseGrid, vectorField);
     // fps = new Fps(p);
-    p.background(240);
+    p.background(50);
   };
 
   p.draw = () => {
