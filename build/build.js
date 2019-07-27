@@ -203,7 +203,6 @@ var sketch1 = function (p) {
         noiseGrid = new NoiseGrid(p, grid, 0.022, 0.003);
         vectorField = new VectorField(p, noiseGrid);
         flowField = new FlowField(p, grid, noiseGrid, vectorField);
-        fps = new Fps(p);
         p.background(240);
     };
     p.draw = function () {
