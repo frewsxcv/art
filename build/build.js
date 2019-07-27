@@ -22,6 +22,7 @@ var Particle = (function () {
         this.acc = p.createVector(0, 0);
         this.p = p;
         this.jumped = false;
+        this.strokeColor = p.color(250, 250, 250, 3);
     }
     Particle.prototype.pixelPos = function () {
         return new PixelPos(this.pos.x, this.pos.y);
@@ -47,7 +48,7 @@ var Particle = (function () {
         if (this.jumped) {
             return;
         }
-        this.p.stroke(240, 240, 240, 5);
+        this.p.stroke(this.strokeColor);
         this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     };
     return Particle;

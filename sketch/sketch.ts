@@ -19,6 +19,7 @@ class Particle {
   velLimit = 1;
   p: p5;
   jumped: boolean;
+  strokeColor: p5.Color;
 
   constructor(p: p5) {
     this.pos = randomPosAroundEdge(p);
@@ -27,6 +28,7 @@ class Particle {
     this.acc = p.createVector(0, 0);
     this.p = p;
     this.jumped = false;
+    this.strokeColor = p.color(250, 250, 250, 3);
   }
 
   pixelPos() {
@@ -60,7 +62,7 @@ class Particle {
     if (this.jumped) {
       return;
     }
-    this.p.stroke(240, 240, 240, 5);
+    this.p.stroke(this.strokeColor);
     this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
     // if (distance(this.prevPos, this.pos) > 200) {
     //   debugger;
