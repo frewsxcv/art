@@ -42,7 +42,6 @@ class Particle {
     this.prevPos = this.pos.copy();
     this.pos.add(this.vel);
     this.jumped = this.pos.x <= 0 || this.pos.y <= 0 || this.pos.x >= this.p.width || this.pos.y >= this.p.height;
-    // console.log(this.pos);
     if (this.jumped) {
       this.pos = randomPosAroundEdge(this.p);
       return;
@@ -64,10 +63,6 @@ class Particle {
     }
     this.p.stroke(this.strokeColor);
     this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
-    // if (distance(this.prevPos, this.pos) > 200) {
-    //   debugger;
-    // }
-    // this.p.point(this.pos.x, this.pos.y);
   }
 }
 
