@@ -124,14 +124,16 @@ var VectorField = (function () {
         this.p = p;
         this.arrowColor = p.color(255, 255, 255);
         this.vectorMag = 0.8;
+        for (var i = 0; i < noiseGrid.grid.numCells; i++) {
+            this.vecs[i] = p.createVector(this.vectorMag, 0, 0);
+        }
     }
     VectorField.prototype.update = function () {
         var _this = this;
         this.noiseGrid.grid.forEachCell(function (cell) {
             var noiseVal = _this.noiseGrid.noiseAt(cell.gridPos);
-            var vec = p5.Vector.fromAngle(noiseVal * 4 * _this.p.TWO_PI);
-            vec.setMag(_this.vectorMag);
-            _this.vecs[cell.gridPos.x * _this.noiseGrid.grid.numCellsInRow + cell.gridPos.y] = vec;
+            var vec = _this.vecs[cell.gridPos.x * _this.noiseGrid.grid.numCellsInRow + cell.gridPos.y];
+            vec.rotate(noiseVal * 4 * _this.p.TWO_PI - vec.heading());
         });
     };
     VectorField.prototype.forceFromPixelPos = function (pixelPos) {

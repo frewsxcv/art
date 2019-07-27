@@ -182,16 +182,18 @@ class VectorField {
     this.p = p;
     this.arrowColor = p.color(255, 255, 255);
     this.vectorMag = 0.8;
+    for (let i = 0; i < noiseGrid.grid.numCells; i++) {
+      this.vecs[i] = p.createVector(this.vectorMag, 0, 0);
+    }
   }
 
   update() {
     this.noiseGrid.grid.forEachCell(cell => {
       const noiseVal = this.noiseGrid.noiseAt(cell.gridPos);
-      const vec = p5.Vector.fromAngle(noiseVal * 4 * this.p.TWO_PI);
-      vec.setMag(this.vectorMag);
-      this.vecs[
+      const vec = this.vecs[
         cell.gridPos.x * this.noiseGrid.grid.numCellsInRow + cell.gridPos.y
-      ] = vec;
+      ];
+      vec.rotate(noiseVal * 4 * this.p.TWO_PI - vec.heading());
     });
   }
 
