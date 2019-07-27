@@ -288,7 +288,7 @@ const sketch1 = (p: p5) => {
   let vectorField: VectorField;
 
   p.setup = () => {
-    grid = new Grid(p, 500, 10);
+    grid = new Grid(p, 300, 10);
     noiseGrid = new NoiseGrid(p, grid, 0.022, 0.003);
     vectorField = new VectorField(p, noiseGrid);
     flowField = new FlowField(p, grid, noiseGrid, vectorField);
@@ -308,4 +308,6 @@ const sketch1 = (p: p5) => {
   };
 };
 
-new p5(sketch1);
+window.addEventListener('DOMContentLoaded', () => {
+  new p5(sketch1, window.document.getElementById('sketch'));
+});

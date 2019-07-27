@@ -8,12 +8,24 @@
     <link rel="icon" href="https://p5js.org/assets/img/favicon.ico" />
 
     <style>
-      * {
+      html, body {
+        height: 100%;
+      }
+
+      body {
         padding: 0px;
-        margin: 0px;
+        margin: 0;
+        display: flex;
+
+        /* This centers our sketch horizontally. */
+        justify-content: center;
+
+        /* This centers our sketch vertically. */
+        align-items: center;
       }
     </style>
-    <script></script>
   </head>
-  <body></body>
+  <body>
+    <div id="sketch"></div>
+  </body>
 </html>

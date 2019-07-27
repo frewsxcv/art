@@ -199,7 +199,7 @@ var sketch1 = function (p) {
     var fps;
     var vectorField;
     p.setup = function () {
-        grid = new Grid(p, 500, 10);
+        grid = new Grid(p, 300, 10);
         noiseGrid = new NoiseGrid(p, grid, 0.022, 0.003);
         vectorField = new VectorField(p, noiseGrid);
         flowField = new FlowField(p, grid, noiseGrid, vectorField);
@@ -213,5 +213,7 @@ var sketch1 = function (p) {
         flowField.visualize();
     };
 };
-new p5(sketch1);
+window.addEventListener('DOMContentLoaded', function () {
+    new p5(sketch1, window.document.getElementById('sketch'));
+});
 //# sourceMappingURL=build.js.map
